@@ -40,7 +40,6 @@ public class PluginEnvironment extends CordovaPlugin {
           }
           method.invoke(PluginEnvironment.this, args, callbackContext);
         } catch (Exception e) {
-          Log.e("CordovaLog", "An error occurred", e);
           callbackContext.error(e.toString());
         }
       }
@@ -80,7 +79,6 @@ public class PluginEnvironment extends CordovaPlugin {
       @SuppressWarnings({ "rawtypes" })
       Class GoogleMapsClass = Class.forName("com.google.android.gms.maps.GoogleMap");
     } catch (Exception e) {
-      Log.e("GoogleMaps", "Error", e);
       callbackContext.error(e.getMessage());
       return;
     }

@@ -11,7 +11,6 @@ import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.SystemClock;
-import android.util.Log;
 import android.view.animation.BounceInterpolator;
 import android.view.animation.Interpolator;
 import android.view.animation.LinearInterpolator;
@@ -612,7 +611,6 @@ public class PluginMarker extends MyPlugin implements MyPluginInterface {
     String markerId = args.getString(0);
     String animation = args.getString(1);
     final Marker marker = this.getMarker(markerId);
-    Log.d(TAG, "--->setAnimation: markerId = " + markerId + ", animation = " + animation);
     if (marker == null) {
       callbackContext.error("marker is null");
       return;
@@ -1117,7 +1115,6 @@ public class PluginMarker extends MyPlugin implements MyPluginInterface {
               int count = iconCacheKeys.get(result.cacheKey);
               iconCacheKeys.put(result.cacheKey, count + 1);
             }
-            //Log.d(TAG, "----> " + result.cacheKey + " = " + iconCacheKeys.get(result.cacheKey));
           }
 
           //------------------------

@@ -188,7 +188,6 @@ public class PluginKmlOverlay extends MyPlugin implements MyPluginInterface {
       ArrayList<Bundle> children;
       ArrayList<String> styleIDs;
 
-      //Log.d(TAG, "--->tagName = " + tagName + "(" + rootElement + ")");
       result.putString("tagName", tagName);
 
       KML_TAG kmlTag = null;
@@ -342,7 +341,6 @@ public class PluginKmlOverlay extends MyPlugin implements MyPluginInterface {
 
     InputStream inputStream;
     try {
-      //Log.d("PluginKmlOverlay", "---> url = " + urlStr);
       if (urlStr.startsWith("http://") || urlStr.startsWith("https://")) {
         URL url = new URL(urlStr);
         boolean redirect = true;
@@ -390,15 +388,12 @@ public class PluginKmlOverlay extends MyPlugin implements MyPluginInterface {
           boolean isAbsolutePath = urlStr.startsWith("/");
           File relativePath = new File(urlStr);
           urlStr = relativePath.getCanonicalPath();
-          //Log.d(TAG, "imgUrl = " + imgUrl);
           if (!isAbsolutePath) {
             urlStr = urlStr.substring(1);
           }
-          //Log.d(TAG, "imgUrl = " + imgUrl);
         } catch (Exception e) {
           e.printStackTrace();
         }
-        //Log.d("PluginKmlOverlay", "---> url = " + urlStr);
         inputStream = new FileInputStream(urlStr);
       } else {
         if (urlStr.indexOf("file:///android_asset/") == 0) {
@@ -410,15 +405,12 @@ public class PluginKmlOverlay extends MyPlugin implements MyPluginInterface {
           boolean isAbsolutePath = urlStr.startsWith("/");
           File relativePath = new File(urlStr);
           urlStr = relativePath.getCanonicalPath();
-          //Log.d(TAG, "imgUrl = " + imgUrl);
           if (!isAbsolutePath) {
             urlStr = urlStr.substring(1);
           }
-          //Log.d(TAG, "imgUrl = " + imgUrl);
         } catch (Exception e) {
           e.printStackTrace();
         }
-        //Log.d("PluginKmlOverlay", "---> url = " + urlStr);
         inputStream = cordova.getActivity().getResources().getAssets().open(urlStr);
       }
 

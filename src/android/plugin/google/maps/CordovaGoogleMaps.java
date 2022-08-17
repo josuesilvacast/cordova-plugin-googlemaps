@@ -60,7 +60,6 @@ public class CordovaGoogleMaps extends CordovaPlugin implements ViewTreeObserver
     if (root != null) {
       return;
     }
-    LOG.setLogLevel(LOG.ERROR);
 
     activity = cordova.getActivity();
     final View view = webView.getView();
@@ -77,7 +76,6 @@ public class CordovaGoogleMaps extends CordovaPlugin implements ViewTreeObserver
         //View view = webView.getView();
         //if (Build.VERSION.SDK_INT >= 21 || "org.xwalk.core.XWalkView".equals(view.getClass().getName())){
         //  view.setLayerType(View.LAYER_TYPE_HARDWARE, null);
-        //  Log.d("Layout", "--> view =" + view.isHardwareAccelerated()); //always false
         //}
 
 
@@ -86,7 +84,6 @@ public class CordovaGoogleMaps extends CordovaPlugin implements ViewTreeObserver
         // ------------------------------
         int checkGooglePlayServices = GooglePlayServicesUtil.isGooglePlayServicesAvailable(activity);
 
-        Log.d(TAG, "----> checkGooglePlayServices = " + (ConnectionResult.SUCCESS == checkGooglePlayServices));
 
         if (checkGooglePlayServices != ConnectionResult.SUCCESS) {
           // google play services is missing!!!!
@@ -95,7 +92,6 @@ public class CordovaGoogleMaps extends CordovaPlugin implements ViewTreeObserver
            * of following in ConnectionResult: SUCCESS, SERVICE_MISSING,
            * SERVICE_VERSION_UPDATE_REQUIRED, SERVICE_DISABLED, SERVICE_INVALID.
            */
-          Log.e(TAG, "---Google Play Services is not available: " + GooglePlayServicesUtil.getErrorString(checkGooglePlayServices));
 
           boolean isNeedToUpdate = false;
 
@@ -161,7 +157,6 @@ public class CordovaGoogleMaps extends CordovaPlugin implements ViewTreeObserver
           // show it
           alertDialog.show();
 
-          Log.e(TAG, "Google Play Services is not available.");
           return;
         }
 
@@ -361,7 +356,6 @@ public class CordovaGoogleMaps extends CordovaPlugin implements ViewTreeObserver
         return;
     }
 
-    //Log.d(TAG, "--->stopFlag = " + mPluginLayout.stopFlag + ", mPluginLayout.needUpdatePosition = " + mPluginLayout.needUpdatePosition);
     if (!mPluginLayout.stopFlag || mPluginLayout.needUpdatePosition) {
         mPluginLayout.putHTMLElements(elements);
     }
@@ -468,7 +462,6 @@ public class CordovaGoogleMaps extends CordovaPlugin implements ViewTreeObserver
     //------------------------------------------
     JSONObject meta = args.getJSONObject(0);
     String mapId = meta.getString("__pgmId");
-    Log.d(TAG, "---> mapId = " + mapId);
     PluginStreetViewPanorama pluginStreetView = new PluginStreetViewPanorama();
     pluginStreetView.privateInitialize(mapId, cordova, webView, null);
     pluginStreetView.initialize(cordova, webView);

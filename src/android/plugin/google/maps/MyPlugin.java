@@ -88,8 +88,6 @@ public class MyPlugin extends CordovaPlugin implements MyPluginInterface {
 
 
             //CordovaPlugin plugin = mapCtrl.webView.getPluginManager().getPlugin(this.getServiceName());
-            //    Log.d("MyPlugin", "---> this = " + this);
-            //    Log.d("MyPlugin", "---> plugin = " + plugin);
 
             Method[] classMethods = self.getClass().getMethods();
             for (Method classMethod : classMethods) {
@@ -101,17 +99,6 @@ public class MyPlugin extends CordovaPlugin implements MyPluginInterface {
           //  this.create(args, callbackContext);
           //  return true;
           if (methods.containsKey(action)) {
-            if (self.mapCtrl.mPluginLayout.isDebug) {
-              try {
-                if (args != null && args.length() > 0) {
-                  Log.d(TAG, "(debug)action=" + action + " args[0]=" + args.getString(0));
-                } else {
-                  Log.d(TAG, "(debug)action=" + action);
-                }
-              } catch (JSONException e) {
-                e.printStackTrace();
-              }
-            }
             Method method = methods.get(action);
             try {
               if (isRemoved) {
@@ -141,42 +128,36 @@ public class MyPlugin extends CordovaPlugin implements MyPluginInterface {
 
   protected synchronized Circle getCircle(String id) {
     if (!pluginMap.objects.containsKey(id)) {
-      //Log.e(TAG, "---> can not find the circle : " + id);
       return null;
     }
     return (Circle)pluginMap.objects.get(id);
   }
   protected synchronized GroundOverlay getGroundOverlay(String id) {
     if (!pluginMap.objects.containsKey(id)) {
-      //Log.e(TAG, "---> can not find the ground overlay : " + id);
       return null;
     }
     return (GroundOverlay)pluginMap.objects.get(id);
   }
   protected synchronized Marker getMarker(String id) {
     if (!pluginMap.objects.containsKey(id)) {
-      //Log.e(TAG, "---> can not find the maker : " + id);
       return null;
     }
     return (Marker)pluginMap.objects.get(id);
   }
   protected synchronized Polyline getPolyline(String id) {
     if (!pluginMap.objects.containsKey(id)) {
-      //Log.e(TAG, "---> can not find the polyline : " + id);
       return null;
     }
     return (Polyline)pluginMap.objects.get(id);
   }
   protected synchronized Polygon getPolygon(String id) {
     if (!pluginMap.objects.containsKey(id)) {
-      //Log.e(TAG, "---> can not find the polygon : " + id);
       return null;
     }
     return (Polygon)pluginMap.objects.get(id);
   }
   protected synchronized TileOverlay getTileOverlay(String id) {
     if (!pluginMap.objects.containsKey(id)) {
-      //Log.e(TAG, "---> can not find the tileoverlay : " + id);
       return null;
     }
     return (TileOverlay)pluginMap.objects.get(id);

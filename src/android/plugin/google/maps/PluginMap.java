@@ -19,7 +19,6 @@ import android.os.Looper;
 import android.support.annotation.NonNull;
 import android.support.v4.content.PermissionChecker;
 import android.util.Base64;
-import android.util.Log;
 import android.view.Gravity;
 import android.view.View;
 import android.view.ViewGroup;
@@ -190,7 +189,6 @@ public class PluginMap extends MyPlugin implements OnMarkerClickListener,
 
         // Request geolocation permission.
         boolean locationPermission = PermissionChecker.checkSelfPermission(cordova.getActivity(), Manifest.permission.ACCESS_COARSE_LOCATION) == PermissionChecker.PERMISSION_GRANTED;
-        //Log.d(TAG, "---> (235) hasPermission =  " + locationPermission);
 
         if (!locationPermission) {
           //_saveArgs = args;
@@ -206,8 +204,6 @@ public class PluginMap extends MyPlugin implements OnMarkerClickListener,
             }
           }
           locationPermission = PermissionChecker.checkSelfPermission(cordova.getActivity(), Manifest.permission.ACCESS_FINE_LOCATION) == PermissionChecker.PERMISSION_GRANTED;
-
-          //Log.d(TAG, "---> (252)setMyLocationEnabled, hasPermission =  " + locationPermission);
 
         }
       }
@@ -337,7 +333,6 @@ public class PluginMap extends MyPlugin implements OnMarkerClickListener,
 
                 if (controls.has("myLocationButton") || controls.has("myLocation")) {
                   boolean locationPermission = PermissionChecker.checkSelfPermission(cordova.getActivity(), Manifest.permission.ACCESS_COARSE_LOCATION) == PermissionChecker.PERMISSION_GRANTED;
-                  //Log.d(TAG, "---> (314) hasPermission =  " + locationPermission);
 
                   if (locationPermission) {
                     Boolean isMyLocationEnabled = false;
@@ -351,7 +346,6 @@ public class PluginMap extends MyPlugin implements OnMarkerClickListener,
                       isMyLocationButtonEnabled = controls.getBoolean("myLocationButton");
                       map.getUiSettings().setMyLocationButtonEnabled(isMyLocationButtonEnabled);
                     }
-                    //Log.d(TAG, "--->isMyLocationButtonEnabled = " + isMyLocationButtonEnabled + ", isMyLocationEnabled = " + isMyLocationEnabled);
                     if (!isMyLocationEnabled && isMyLocationButtonEnabled) {
                       dummyMyLocationButton.setVisibility(View.VISIBLE);
                     } else {
@@ -593,18 +587,15 @@ public class PluginMap extends MyPlugin implements OnMarkerClickListener,
   public synchronized void loadPlugin(final JSONArray args, final CallbackContext callbackContext) throws JSONException {
     final String serviceName = args.getString(0);
     final String pluginName = mapId + "-" + serviceName.toLowerCase();
-    //Log.d("PluginMap", "serviceName = " + serviceName + ", pluginName = " + pluginName);
 
     try {
 
       if (plugins.containsKey(pluginName)) {
-        //Log.d("PluginMap", "--> useCache");
         MyPlugin myPlugin = (MyPlugin) plugins.get(pluginName).plugin;
         myPlugin.create(args, callbackContext);
         return;
       }
 
-      //Log.d("PluginMap", "--> create new instance");
       String className = "plugin.google.maps.Plugin" + serviceName;
       Class pluginCls = Class.forName(className);
 
@@ -628,7 +619,6 @@ public class PluginMap extends MyPlugin implements OnMarkerClickListener,
     Builder builder = CameraPosition.builder();
     builder.tilt(map.getCameraPosition().tilt);
     builder.bearing(map.getCameraPosition().bearing);
-    Log.d(TAG, mapView.getWidth() + "x" + mapView.getHeight());
 
     // Fit the camera to the cameraBounds with 20px padding.
     CameraUpdate cameraUpdate = CameraUpdateFactory.newLatLngBounds(cameraBounds, padding / (int)density);
@@ -689,7 +679,6 @@ public class PluginMap extends MyPlugin implements OnMarkerClickListener,
 
   public void resizeMap(JSONArray args, final CallbackContext callbackContext) throws JSONException {
     if (mapCtrl.mPluginLayout == null || mapDivId == null) {
-      //Log.d("PluginMap", "---> resizeMap / mPluginLayout = null");
       callbackContext.success();
       if (initCameraBounds != null) {
         mainHandler.postDelayed(new Runnable() {
@@ -732,7 +721,6 @@ public class PluginMap extends MyPlugin implements OnMarkerClickListener,
 
         RectF drawRect = mapCtrl.mPluginLayout.HTMLNodeRectFs.get(mapDivId);
 
-        //Log.d(TAG, "--->mapDivId = " + mapDivId + ", drawRect = " + drawRect);
         if (drawRect != null) {
           final int scrollY = webView.getView().getScrollY();
 
@@ -828,7 +816,6 @@ public class PluginMap extends MyPlugin implements OnMarkerClickListener,
             public void run() {
               mapCtrl.mPluginLayout.removePluginOverlay(mapId);
 
-              //Log.d("pluginMap", "--> map = " + map);
               if (map != null) {
                 try {
                   map.setIndoorEnabled(false);
@@ -861,7 +848,6 @@ public class PluginMap extends MyPlugin implements OnMarkerClickListener,
                   //mapView.onCancelPendingInputEvents();   // Android 4.2 crashes
                   mapView.onPause();
                   mapView.onDestroy();
-                  //Log.d("pluginMap", "--> mapView.onDestroy()");
                 } catch (Exception e) {
                   e.printStackTrace();
                 }
@@ -881,7 +867,6 @@ public class PluginMap extends MyPlugin implements OnMarkerClickListener,
                   pluginEntry = null;
                 }
               }
-              //Log.d("pluginMap", "--> mapView = " + mapView);
               projection = null;
               plugins = null;
               map = null;
@@ -911,7 +896,6 @@ public class PluginMap extends MyPlugin implements OnMarkerClickListener,
   @TargetApi(Build.VERSION_CODES.JELLY_BEAN_MR1)
   @Override
   public View getInfoContents(Marker marker) {
-    //Log.d(TAG, "--->getInfoContents");
     activeMarker = marker;
     String title = marker.getTitle();
     String snippet = marker.getSnippet();
@@ -927,7 +911,6 @@ public class PluginMap extends MyPlugin implements OnMarkerClickListener,
 
     PluginEntry pluginEntry = plugins.get(mapId + "-" + className);
     if (pluginEntry == null) {
-      //Log.d(TAG, "---> getInfoContents / marker.title = " + marker.getTitle());
       return null;
     }
     MyPlugin myPlugin = (MyPlugin)pluginEntry.plugin;
@@ -935,7 +918,6 @@ public class PluginMap extends MyPlugin implements OnMarkerClickListener,
     JSONObject properties = null;
     JSONObject styles = null;
     String propertyId = "marker_property_" + markerTag;
-    //Log.d(TAG, "---> getInfoContents / propertyId = " + propertyId);
 
     if (objects.containsKey(propertyId)) {
       properties = (JSONObject) objects.get(propertyId);
@@ -1142,7 +1124,6 @@ public class PluginMap extends MyPlugin implements OnMarkerClickListener,
 
   @Override
   public View getInfoWindow(Marker marker) {
-    //Log.d(TAG, "--->getInfoWindow");
     activeMarker = marker;
 
     JSONObject properties = null;
@@ -1155,11 +1136,8 @@ public class PluginMap extends MyPlugin implements OnMarkerClickListener,
 
     String propertyId = "marker_property_" + markerTag;
 
-    //Log.e(TAG, "---> getInfoWindow / propertyId = " + propertyId);
-    //Log.e(TAG, "---> getInfoWindow / pluginEntryId = " + mapId + "-" + className);
     PluginEntry pluginEntry = plugins.get(mapId + "-" + className);
     if (pluginEntry == null) {
-      Log.e(TAG, "---> getInfoWindow / pluginEntry is null");
       return null;
     }
     MyPlugin myPlugin = (MyPlugin)pluginEntry.plugin;
@@ -1183,8 +1161,6 @@ public class PluginMap extends MyPlugin implements OnMarkerClickListener,
       } catch (Exception e) {
         e.printStackTrace();
       }
-    } else {
-      Log.e(TAG, "---> getInfoWindow / can not find the property");
     }
     return null;
   }
@@ -1835,7 +1811,6 @@ public class PluginMap extends MyPlugin implements OnMarkerClickListener,
     final JSONObject params = args.getJSONObject(0);
 
     boolean locationPermission = PermissionChecker.checkSelfPermission(cordova.getActivity(), Manifest.permission.ACCESS_COARSE_LOCATION) == PermissionChecker.PERMISSION_GRANTED;
-    //Log.d(TAG, "---> setMyLocationEnabled, hasPermission =  " + locationPermission);
 
     if (!locationPermission) {
       //_saveArgs = args;
@@ -1852,7 +1827,6 @@ public class PluginMap extends MyPlugin implements OnMarkerClickListener,
       }
       locationPermission = PermissionChecker.checkSelfPermission(cordova.getActivity(), Manifest.permission.ACCESS_FINE_LOCATION) == PermissionChecker.PERMISSION_GRANTED;
 
-      //Log.d(TAG, "---> (1720)setMyLocationEnabled, hasPermission =  " + locationPermission);
 
       if (!locationPermission) {
         callbackContext.error(PluginUtil.getPgmStrings(activity,"pgm_location_rejected_by_user"));
@@ -1869,18 +1843,15 @@ public class PluginMap extends MyPlugin implements OnMarkerClickListener,
 
           Boolean isMyLocationEnabled = false;
           if (params.has("myLocation")) {
-            //Log.d(TAG, "--->myLocation = " + params.getBoolean("myLocation"));
             isMyLocationEnabled = params.getBoolean("myLocation");
             map.setMyLocationEnabled(isMyLocationEnabled);
           }
 
           Boolean isMyLocationButtonEnabled = false;
           if (params.has("myLocationButton")) {
-            //Log.d(TAG, "--->myLocationButton = " + params.getBoolean("myLocationButton"));
             isMyLocationButtonEnabled = params.getBoolean("myLocationButton");
             map.getUiSettings().setMyLocationButtonEnabled(isMyLocationButtonEnabled);
           }
-          //Log.d(TAG, "--->isMyLocationButtonEnabled = " + isMyLocationButtonEnabled + ", isMyLocationEnabled = " + isMyLocationEnabled);
           if (!isMyLocationEnabled && isMyLocationButtonEnabled) {
             dummyMyLocationButton.setVisibility(View.VISIBLE);
           } else {
@@ -2250,7 +2221,6 @@ public class PluginMap extends MyPlugin implements OnMarkerClickListener,
 
   @Override
   public boolean onMarkerClick(Marker marker) {
-    //Log.d(TAG, "---> onMarkerClick / marker.tag = " + marker.getTag());
 
     JSONObject properties = null;
     String clusterId_markerId = marker.getTag() + "";
@@ -2279,7 +2249,6 @@ public class PluginMap extends MyPlugin implements OnMarkerClickListener,
     }
     MyPlugin myPlugin = (MyPlugin)pluginEntry.plugin;
     String propertyId = "marker_property_" + clusterId_markerId;
-    //Log.d(TAG, "---> onMarkerClick / propertyId = " + propertyId);
     if (objects.containsKey(propertyId)) {
       properties = (JSONObject) objects.get(propertyId);
       if (properties.has("disableAutoPan")) {
@@ -2365,7 +2334,6 @@ public class PluginMap extends MyPlugin implements OnMarkerClickListener,
 
   @Override
   public void onInfoWindowClose(Marker marker) {
-    //Log.d(TAG, "--->onInfoWindowClose");
     boolean useHtmlInfoWnd = marker.getTitle() == null &&
                              marker.getSnippet() == null;
     if (useHtmlInfoWnd) {
@@ -2429,7 +2397,6 @@ public class PluginMap extends MyPlugin implements OnMarkerClickListener,
   }
   public void syncInfoWndPosition() {
     if (activeMarker == null) {
-      Log.d(TAG, "--->no active marker");
       return;
     }
     LatLng latLng = activeMarker.getPosition();
@@ -2989,8 +2956,6 @@ public class PluginMap extends MyPlugin implements OnMarkerClickListener,
                 if (key.contains("property")) {
                   properties = (JSONObject) objects.get(key);
                   try {
-                    //Log.d("PluginMap", "-----> key = " + key + ", " + properties.toString(2));
-                    //Log.d("PluginMap", "-----> key = " + key + ", isVisible = " + properties.getBoolean("isVisible") + ", isClickable = " + properties.getBoolean("isClickable"));
                     // skip invisible overlay
                     if (!properties.getBoolean("isVisible") ||
                         !properties.getBoolean("isClickable")) {
@@ -3001,7 +2966,6 @@ public class PluginMap extends MyPlugin implements OnMarkerClickListener,
                   }
                   bounds = (LatLngBounds) objects.get(key.replace("property", "bounds"));
                   if (bounds.contains(point)) {
-                    //Log.d("PluginMap", "-----> add key = " + key.replace("property_", ""));
                     boundsHitList.put(key, objects.get(key.replace("property_", "")));
                   }
 
@@ -3010,28 +2974,18 @@ public class PluginMap extends MyPlugin implements OnMarkerClickListener,
             }
 
           //}
-        } catch (Exception e) {
-          //e.printStackTrace();
-        }
+        } catch (Exception e) {     }
 
 
         cordova.getActivity().runOnUiThread(new Runnable() {
           @Override
           public void run() {
-            //Log.d(TAG, "---> onMapClick : " + activeMarker);
             if (activeMarker != null) {
-              //Log.d(TAG, "---> activeMarker.getTag() : " + activeMarker.getTag());
               String markerTag = activeMarker.getTag() + "";
               if (markerTag.contains("markercluster")) {
                 if (markerTag.contains("-marker_")) {
                   onClusterEvent("info_close", activeMarker);
                 }
-        //              } else {
-        //                boolean useHtmlInfoWnd = activeMarker.getTitle() == null &&
-        //                    activeMarker.getSnippet() == null;
-        //                if (useHtmlInfoWnd || activeMarker.isInfoWindowShown()) {
-        //                  onInfoWindowClose(activeMarker);
-        //                }
               }
               activeMarker = null;
             }
@@ -3046,9 +3000,6 @@ public class PluginMap extends MyPlugin implements OnMarkerClickListener,
             hitArea.x = 1;
             hitArea.y = 1;
             LatLng touchPoint = null;
-            //double threshold = calculateDistance(
-            //    projection.fromScreenLocation(origin),
-            //    projection.fromScreenLocation(hitArea));
 
             float zIndex = -1;
             float maxZIndex = -1;
@@ -3151,7 +3102,6 @@ public class PluginMap extends MyPlugin implements OnMarkerClickListener,
             final Object finalHitOverlay = hitOverlay;
             final LatLng finalTouchPoint = touchPoint;
 
-            //Log.d("PluginMap", "---> hitOverlay = " + finalHitOverlay);
             if (finalHitOverlay instanceof Polygon) {
               onPolygonClick((Polygon)finalHitOverlay, finalTouchPoint);
             } else if (finalHitOverlay instanceof Polyline) {
@@ -3172,7 +3122,6 @@ public class PluginMap extends MyPlugin implements OnMarkerClickListener,
 
   public void onRequestPermissionResult(int requestCode, String[] permissions,
                                         int[] grantResults) throws JSONException {
-    //Log.d(TAG, "---> onRequestPermissionResult");
 
     synchronized (semaphore) {
       semaphore.notify();

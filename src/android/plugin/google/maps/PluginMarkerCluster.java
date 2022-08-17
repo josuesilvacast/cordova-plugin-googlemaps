@@ -2,7 +2,6 @@ package plugin.google.maps;
 
 import android.graphics.Bitmap;
 import android.os.Bundle;
-import android.util.Log;
 
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.LatLngBounds;
@@ -152,7 +151,6 @@ public class PluginMarkerCluster extends PluginMarker {
 
   public void remove(final JSONArray args, final CallbackContext callbackContext) throws JSONException {
     String clusterId = args.getString(0);
-    //Log.d(TAG, "-->remove = " + clusterId);
     synchronized (debugFlags) {
       debugFlags.remove(clusterId);
       waitCntManager.remove(clusterId);
@@ -160,7 +158,6 @@ public class PluginMarkerCluster extends PluginMarker {
     synchronized (pluginMarkers) {
       for(String key: pluginMarkers.keySet()) {
         if (key.startsWith(clusterId)) {
-          //Log.d(TAG, "-->delete = " + key);
           pluginMarkers.put(key, STATUS.CREATED);
           deleteMarkers.add(key);
         }
@@ -344,8 +341,6 @@ public class PluginMarkerCluster extends PluginMarker {
       changeProperties.put(clusterId_markerId, properties);
     }
 
-    //Log.d(TAG, "---> deleteCnt : " + deleteCnt + ", newCnt : " + newCnt + ", updateCnt : " + updateCnt + ", reuseCnt : " + reuseCnt);
-
     if (updateClusterIDs.size() == 0) {
       deleteProcess(clusterId, params);
       callbackContext.success();
@@ -376,7 +371,6 @@ public class PluginMarkerCluster extends PluginMarker {
         while (iterator.hasNext()) {
           currentCnt++;
           clusterId_markerId = iterator.next();
-          //Log.d(TAG, "---> progress = " + currentCnt + "/ " + waitCnt + ", " + clusterId_markerId);
           synchronized (pluginMarkers) {
             pluginMarkers.put(clusterId_markerId, STATUS.WORKING);
           }
@@ -436,7 +430,6 @@ public class PluginMarkerCluster extends PluginMarker {
                     synchronized (pluginMarkers) {
                       pluginMarkers.put(fMarkerId, STATUS.DELETED);
                     }
-                    Log.e(TAG, message);
                     decreaseWaitCnt(clusterId);
                     synchronized (deleteMarkers) {
                       deleteMarkers.add(fMarkerId);
@@ -508,7 +501,6 @@ public class PluginMarkerCluster extends PluginMarker {
           if (markerProperties.containsKey("icon")) {
             Bundle icon = markerProperties.getBundle("icon");
             final String fMarkerId = clusterId_markerId;
-            //Log.d(TAG, "---> targetMarkerId = " + targetMarkerId + ", marker = " + marker);
             setIconToClusterMarker(clusterId_markerId, marker, icon, new PluginAsyncInterface() {
               @Override
               public void onPostExecute(Object object) {
@@ -517,7 +509,6 @@ public class PluginMarkerCluster extends PluginMarker {
                 //--------------------------------------
                 decreaseWaitCnt(clusterId);
                 synchronized (pluginMarkers) {
-                  //Log.d(TAG, "create : " + fMarkerId + " = CREATED");
                   pluginMarkers.put(fMarkerId, STATUS.CREATED);
                 }
               }
@@ -527,7 +518,6 @@ public class PluginMarkerCluster extends PluginMarker {
                 //--------------------------------------
                 // Could not read icon for some reason
                 //--------------------------------------
-                Log.e(TAG, errorMsg);
                 decreaseWaitCnt(clusterId);
                 synchronized (deleteMarkers) {
                   deleteMarkers.add(fMarkerId);
@@ -542,7 +532,6 @@ public class PluginMarkerCluster extends PluginMarker {
             // No icon for marker
             //--------------------
             synchronized (pluginMarkers) {
-              //Log.d(TAG, "create : " + clusterId_markerId + " = CREATED");
               pluginMarkers.put(clusterId_markerId, STATUS.CREATED);
             }
             decreaseWaitCnt(clusterId);
@@ -603,7 +592,6 @@ public class PluginMarkerCluster extends PluginMarker {
     synchronized (waitCntManager) {
       int waitCnt = waitCntManager.get(clusterId);
       waitCnt = waitCnt - 1;
-      //Log.d(TAG, "--->waitCnt = " + waitCnt);
       if (waitCnt == 0) {
         synchronized (semaphore) {
           semaphore.notify();
@@ -644,7 +632,6 @@ public class PluginMarkerCluster extends PluginMarker {
           }
           marker.setVisible(true);
 
-          //Log.d(TAG, "create : " + markerId + " = CREATED");
           pluginMarkers.put(markerId, STATUS.CREATED);
           callback.onPostExecute(object);
         }
